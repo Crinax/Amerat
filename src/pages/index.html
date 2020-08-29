@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <title>InstaSpec</title>
+    <link rel="stylesheet" href="../styles/out/general.css">
+</head>
+<body>
+    <div id="title-bar">
+        <i id="app-icon" onclick="AppWindow.toggleSidebar();"></i><div id="title">InstaSpec</div>
+        <div id="title-bar-buttons">
+            <button class="panel-button" id="min-button" onclick="AppWindow.minWin()">0</button>
+            <!-- <button class="panel-button" id="max-button" onclick="maxWin()">1</button> {2} -->
+            <button class="panel-button" id="close-button" onclick="AppWindow.closeWin()">r</button>
+        </div>
+    </div>
+    <div id="wrapper">
+        <header class="header">
+        </header>
+        <main>
+            <aside id="left-sidebar">
+                <ul class="navigation">
+                    <li>
+                        <button class="navigation-link">Текст</span>
+                    </li>
+                    <li>
+                        <button class="navigation-link">Текст</span>
+                    </li>
+                    <li>
+                        <button class="navigation-link">Текст</span>
+                    </li>
+                    <li>
+                        <button class="navigation-link">Текст</span>
+                    </li>
+                    <li>
+                        <button class="navigation-link">Текст</span>
+                    </li>
+                    <li>
+                        <button class="navigation-link">Текст</span>
+                    </li>
+                </ul>
+            </aside>
+            <aside id="right-sidebar"></aside>
+        </main>
+        <footer>
+
+        </footer>
+    </div>
+    <script>
+        const render = require('../renderer.js');
+    </script>
+    <script src="../scripts/requires.js"></script>
+    <script src="../scripts/app.js"></script>
+</body>
+</html>
