@@ -117,4 +117,14 @@
         background-color: rgb(69, 69, 69);
     }
 }
+.input-error {
+    background-color: #f555;
+    color: #f33;
+    width: max-content;
+    content: 'Неверное имя пользователя или пароль';
+    box-sizing: border-box;
+    border-left: 2px solid #f33;
+    padding: 3px;
+    font-size: 15pt;
+}
 //TODO: стилизиовать модальное окно

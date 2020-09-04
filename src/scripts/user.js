@@ -1,28 +1,26 @@
 const Server = require("./server");
 
-var SERVER = new Server();
-SERVER.__init__();
+SERVER = new Server();
+SERVER.init();
+
 class User {
     constructor() {
+        this.driver;
+    }
+    init() {
         this.driver = SERVER.client;
     }
-    async checkIsLoginPage() {
-        var login = await SERVER.checkExist({name: 'login'});
-        var pass = await SERVER.checkExist({name: 'password'});
-        if (login.size > 0 && pass.size > 0) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
     async auth(login, password) {
-        var loginBut = await SERVER.find({css: 'button[disabled]'});
-        await SERVER.sendKey({name: 'login'}, login);
+        await SERVER.sendKey({name: 'username'}, login);
         await SERVER.sendKey({name: 'password'}, password);
-        await loginBut.click();
-        var title = await SERVER.getDriver().getTitle();
-        return await title;
+        await SERVER.click({css: 'button[disabled]'});
+        await SERVER.click({css: 'img[data-testid="user-avatar"]'});
+        await SERVER.click({className: '_7UhW9   xLCgt      MMzan  KV-D4              fDxYl     '});
+        return await SERVER.getClient().getTitle();
+        
+    }
+    done() {
+        SERVER.destructor();
     }
 }
 module.exports = User;

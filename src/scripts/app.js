@@ -22,10 +22,23 @@ loginWindow.createWindow();
 
 var result;
 var user = new User();
-const authorize = async () => {
+user.init();
+const authorize = () => {
+    inputError = $('.input-error');
+    if (inputError.length != 0) {
+        inputError.remove();
+    }
     let login = $('#login-input').val();
     let password = $('#password-input').val();
-    result = await user.auth(login, password);
-    console.log(result);
+    user.auth(login, password).then((result) => {
+        if (result != 'Error') {
+            console.log(result);
+            loginWindow.destroyWindow();
+        }
+        else {
+            $('.modal-main').prepend('<div class="input-error">Неверное имя пользователя или пароль</div>');
+        }
+    });
+
 }
 //TODO: добавить связь с инстой

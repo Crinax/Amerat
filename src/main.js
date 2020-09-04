@@ -15,6 +15,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
+      worldSafeExecuteJavaScript: true
     },
   });
   win.loadFile('src/pages/index.html');
