@@ -1,22 +1,34 @@
 const Server = require("./server");
 
 SERVER = new Server();
-SERVER.init();
 
 class User {
     constructor() {
         this.driver;
     }
     init() {
-        this.driver = SERVER.client;
+        var error = false;
+        SERVER.init().then((result) => {
+            this.driver = SERVER.client;
+        }).catch(() => {
+            error = true;
+        });
+        return !error;
     }
-    async auth(login, password) {
-        await SERVER.sendKey({name: 'username'}, login);
-        await SERVER.sendKey({name: 'password'}, password);
-        await SERVER.click({css: 'button[disabled]'});
-        await SERVER.click({css: 'img[data-testid="user-avatar"]'});
-        await SERVER.click({className: '_7UhW9   xLCgt      MMzan  KV-D4              fDxYl     '});
-        return await SERVER.getClient().getTitle();
+    auth(login, password) {
+        SERVER.sendKey({name: 'username'}, login);
+        SERVER.sendKey({name: 'password'}, password);
+        SERVER.click({css: 'button[disabled]'});
+        SERVER.find({css: 'p#slfErrorAlert'}).getText().then(result => {
+            state = 'Error: The username or password you entered is incorrect!';
+            SERVER.refresh();
+        });
+        SERVER.click({css: 'img[data-testid="user-avatar"]'});
+        SERVER.click({className: '_7UhW9   xLCgt      MMzan  KV-D4              fDxYl     '});
+        SERVER.find({className: '_7UhW9       fKFbl yUEEX   KV-D4              fDxYl     '}).then(() => {
+            state = 'Success: Authorization completed!';
+        });
+        state = 'Waiting: Authorization...';
         
     }
     done() {

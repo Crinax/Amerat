@@ -1,3 +1,16 @@
+var state = 'Waiting: Connecting...';
+var prevState = 'Waiting: Connecting...'
+const checkState = () => {
+    if (state != prevState) {
+        $(`.message`).attr('class', `message ${state.split(':')[0].toLowerCase()}`);
+        $('.message').text(state);
+        prevSatate = state;
+    }
+}
+var chS = setTimeout(asd = () => {
+    checkState();
+    chs = setTimeout(asd, 10);
+}, 10);
 var loginWindow = new ModalWindow();
 loginWindow.setContent(`
     <header class="modal-header">Log in</header>
@@ -5,15 +18,15 @@ loginWindow.setContent(`
         <div class="form-fields">
             <p id="login-text">Login, e-mail or phone number</p>
             <div class="input-container">
-                <input type="text" id="login-input" placeholder="Login, e-mail or phone num" />
+                <input type="text" id="login-input" placeholder="Login, e-mail or phone num" disabled />
             </div>
             <p id="pass-text">Password</p>
             <div class="input-container">
-                <input type="password" id="password-input" placeholder="Password" />
+                <input type="password" id="password-input" placeholder="Password" disabled />
             </div>
         </div>
         <div class="form-buttons">
-            <button class="form-submit" onclick="authorize();">Log in</button>
+            <button class="form-submit" onclick="">Log in</button>
         </div>
     </main>
 `);
@@ -23,6 +36,17 @@ loginWindow.createWindow();
 var result;
 var user = new User();
 user.init();
+var dw = setTimeout(dwf = () => {
+    if ($('.success').length > 0) {
+        $('#login-input').removeAttr('disabled');
+        $('#password-input').removeAttr('disabled');
+        $('.form-submit').attr('onclick', 'authorize();');
+        clearTimeout(dw);
+    }
+    else {
+        dw = setTimeout(dwf, 10);
+    }
+}, 10);
 const authorize = () => {
     inputError = $('.input-error');
     if (inputError.length != 0) {
@@ -30,15 +54,15 @@ const authorize = () => {
     }
     let login = $('#login-input').val();
     let password = $('#password-input').val();
-    user.auth(login, password).then((result) => {
-        if (result != 'Error') {
-            console.log(result);
+    user.auth(login, password);
+    dw = setTimeout(dwf = () => {
+        if ($('.success').length > 0) {
             loginWindow.destroyWindow();
+            clearTimeout(dw);
         }
         else {
-            $('.modal-main').prepend('<div class="input-error">Неверное имя пользователя или пароль</div>');
+            dw = setTimeout(dwf, 10);
         }
-    });
-
+    }, 10);
 }
 //TODO: добавить связь с инстой

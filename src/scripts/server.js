@@ -6,7 +6,7 @@ class Server {
     destructor() {
         this.client.quit();
     }
-    init() {
+    async init() {
         // var _options = new firefox.Options();
         // _options.headless();
         this.client = new webdriver.Builder()
@@ -15,11 +15,15 @@ class Server {
             .forBrowser('chrome')
             .build();
         this.URL = 'https://instagram.com';
-        this.changeURL(this.URL);
+        return await this.changeURL(this.URL);
     }
-    changeURL(newURL) {
+    async changeURL(newURL) {
         this.URL = newURL || this.client.getCurrentUrl();
-        this.client.get(this.URL);
+        this.client.get(this.URL).then(() => {
+            state = `Success: Successfully connected to ${this.URL}!`;
+        }).catch(() => {
+            state = 'Error: Check your internet connection!';
+        });
         
     }
     getClient() {
@@ -32,7 +36,9 @@ class Server {
         this.client.navigate().forward();
     }
     refresh() {
-        this.client.navigate().refresh();
+        this.client.navigate().refresh().catch(() => {
+            state = 'Error: Check your internet connection!'
+        });
     }
     sendKey(object, key, seconds = 100000) {
         this.client.wait(until.elementLocated(object), seconds).sendKeys(key);

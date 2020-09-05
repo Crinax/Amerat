@@ -1,7 +1,45 @@
 footer {
     width: 100%;
-    height: 2.5%;
+    height: 5%;
     background-color: rgb(69, 69, 69);
     border-top: 1px solid rgb(129, 129, 129);
     box-sizing: border-box;
+    display: flex;
+}
+.message {
+    border: none;
+    padding: 2px;
+    font-size: 12pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 2px solid #777;
+    background-color: #5553;
+    color: #777;
+    z-index: 999;
+    margin: 5px;
+    &.info {
+        @extend .message;
+        border-color: #3ff;
+        background-color: #5ff3;
+        color: #3ff;
+    }
+    &.error {
+        @extend .message;
+        border-color: #f33;
+        background-color: #f553;
+        color: #f33;
+    }
+    &.success {
+        @extend .message;
+        border-color: #3f3;
+        background-color: #5f53;
+        color: #3f3;
+    }
+    &.waiting {
+        @extend .message;
+        border-color: #ff3;
+        background-color: #ff53;
+        color: #ff3;
+    }
 }
