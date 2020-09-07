@@ -20,9 +20,9 @@ class Server {
     async changeURL(newURL) {
         this.URL = newURL || this.client.getCurrentUrl();
         this.client.get(this.URL).then(() => {
-            state = `Success: Successfully connected to ${this.URL}!`;
+            state.setSuccessState(`Successfully connected to ${this.URL}!`);
         }).catch(() => {
-            state = 'Error: Check your internet connection!';
+            state.setConnectionError();
         });
         
     }
@@ -37,14 +37,14 @@ class Server {
     }
     refresh() {
         this.client.navigate().refresh().catch(() => {
-            state = 'Error: Check your internet connection!'
+            state.setConnectionError();
         });
     }
     sendKey(object, key, seconds = 100000) {
         this.client.wait(until.elementLocated(object), seconds).sendKeys(key);
     }
-    find(object, seconds = 100000) {
-        return this.client.wait(until.elementLocated(object), seconds);
+    find(object, seconds = 100000, all = false) {
+        return all ? this.client.wait(until.elementsLocated(object), seconds) : this.client.wait(until.elementLocated(object), seconds);
     }
     click(object, seconds = 100000) {
         this.client.wait(until.elementLocated(object), seconds).click();

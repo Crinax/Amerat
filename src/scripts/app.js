@@ -1,10 +1,12 @@
-var state = 'Waiting: Connecting...';
-var prevState = 'Waiting: Connecting...'
+var state = new State();
+var profile = new Profile();
+state.setConnecting();
+state.prevState(state.state());
 const checkState = () => {
-    if (state != prevState) {
-        $(`.message`).attr('class', `message ${state.split(':')[0].toLowerCase()}`);
-        $('.message').text(state);
-        prevSatate = state;
+    if (state.state() != state.prevState()) {
+        $(`.message`).attr('class', `message ${state.state().split(':')[0].toLowerCase()}`);
+        $('.message').text(state.state());
+        state.prevState(state.state());
     }
 }
 var chS = setTimeout(asd = () => {
@@ -65,4 +67,3 @@ const authorize = () => {
         }
     }, 10);
 }
-//TODO: добавить связь с инстой

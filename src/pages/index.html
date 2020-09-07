@@ -12,7 +12,6 @@
         <i id="app-icon" onclick="AppWindow.toggleSidebar();"></i><div id="title">InstaSpec</div>
         <div id="title-bar-buttons">
             <button class="panel-button" id="min-button" onclick="AppWindow.minWin()">0</button>
-            <!-- <button class="panel-button" id="max-button" onclick="maxWin()">1</button> {2} -->
             <button class="panel-button" id="close-button" onclick="AppWindow.closeWin()">r</button>
         </div>
     </div>
@@ -23,7 +22,7 @@
             <aside id="left-sidebar">
                 <ul class="navigation">
                     <li>
-                        <button class="navigation-link unselected" onclick="Profile.showStatistic(this);">Profile statistic</span>
+                        <button class="navigation-link unselected" onclick="profile.showStatistic();">Profile statistic</span>
                     </li>
                     <li>
                         <button class="navigation-link unselected">Lorem ipsum dolar amet...</span>

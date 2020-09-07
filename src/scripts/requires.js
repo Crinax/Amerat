@@ -5,6 +5,7 @@ const firefox = require('selenium-webdriver/firefox');
 //Server
 const Server = require('../scripts/server');
 const User = require('../scripts/user');
+const State = require('../scripts/state');
 //Graphics
 const { AppWindow } = require('../scripts/graphics');
 const ModalWindow = require('../scripts/modal');
