@@ -36,41 +36,45 @@ class Profile {
         $('#right-sidebar').append(content);
     }
     async loadStatistic() {
-        await this.setProfileImage();
-        await this.setFollowing();
-        await this.setFollowers();
+        this.setProfileImage();
+        this.setFollowing();
+        this.setFollowers();
     }
-    async showStatistic() {
-        await this.loadStatistic().then(() => {
-            this.setContent(`
-                <div class="stats-wrapper">
-                    <header class="stats-header">
-                        <div class="wrapper-profile-image">
-                            <img class="profile-image" src="${this.avatarURL}" alt="avatar" />
-                        </div>
-                    </header>
-                    <main class="stats-main">
-                        <article class="main-stats-header">
-                            <h2 class="main-stats-header-text">Your statistic</h2>
-                        </article>
-                        <article class="following">
-                            <h3 class="following-text">Following: ${this.following}</h3>
-                        </article>
-                        <article class="followers">
-                            <h3 class="followers-text">Followers: ${this.followers}</h3>
-                        </article>
-                        <article class="posts">
-                            <h3 class="posts-text">Posts: ${this.posts}</h3>
-                        </article>
-                        <article class="likes">
-                            <h3 class="likes-text">Likes: ${this.likes}</h3>
-                        </article>
-                        <article class="comments">
-                            <h3 class="comments-text">Comments: ${this.comments}</h3>
-                        </article>
-                    </main>
-                </div>
-            `);
+    showStatistic() {
+        this.loadStatistic().then(() => {
+            setTimeout(() => {
+                this.setContent(`
+                    <div class="stats-wrapper">
+                        <header class="stats-header">
+                            <div class="wrapper-profile-image">
+                                <img class="profile-image" src="${this.avatarURL}" alt="avatar" />
+                            </div>
+                        </header>
+                        <main class="stats-main">
+                            <div class="main-stats-header">
+                                <h2 class="main-stats-header-text">Your statistic</h2>
+                            </div>
+                            <div class="statistic">
+                                <div class="field following">
+                                    <h3 class="following-text">Following: ${this.following}</h3>
+                                </div>
+                                <div class="field followers">
+                                    <h3 class="followers-text">Followers: ${this.followers}</h3>
+                                </div>
+                                <div class="field posts">
+                                    <h3 class="posts-text">Posts: ${this.posts}</h3>
+                                </div>
+                                <div class="field likes">
+                                    <h3 class="likes-text">Likes: ${this.likes}</h3>
+                                </div>
+                                <div class="field comments">
+                                    <h3 class="comments-text">Comments: ${this.comments}</h3>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                `);
+            }, 250);
         });
     }
 }

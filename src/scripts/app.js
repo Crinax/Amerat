@@ -24,7 +24,7 @@ loginWindow.setContent(`
             </div>
             <p id="pass-text">Password</p>
             <div class="input-container">
-                <input type="password" id="password-input" placeholder="Password" disabled />
+                <input type="password" id="password-input" placeholder="Password" minlength="6" disabled />
             </div>
         </div>
         <div class="form-buttons">
