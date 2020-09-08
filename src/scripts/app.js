@@ -1,3 +1,4 @@
+var loader = new Loader();
 var state = new State();
 var profile = new Profile();
 state.setConnecting();

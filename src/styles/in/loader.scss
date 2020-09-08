@@ -1,0 +1,47 @@
+.loader {
+    width: 100px;
+    height: 100px;
+    background-color: rgb(129, 129, 129);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    border: 5px solid rgb(129, 129, 129);
+    border-bottom-left-radius: 0;
+    &-wrapper {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    &-image {
+        width: 100px;
+        height: 100px;
+        animation-name: rot;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+    &-into {
+        width: 50px;
+        height: 50px;
+        background-color: rgb(45, 45, 45);
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100%;
+        border: 5px solid rgb(129, 129, 129);
+        border-bottom-left-radius: 0;
+    }
+}
+@keyframes rot {
+    100% {
+        transform: rotate(360deg);
+    }
+}

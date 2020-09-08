@@ -14,35 +14,34 @@ class Profile {
         state.setWaitingState('Loading profile image...');
         user.getProfileImage().then(result => {
             this.avatarURL = result;
-            state.setLoadedSuccess();
-        }).catch(state.setConnectionError());
+        }).catch(() => {state.setConnectionError()});
     }
     async setFollowing() {
         state.setWaitingState('Loading following...');
         user.getFollowing().then(result => {
             this.following = result;
-            state.setLoadedSuccess();
-        }).catch(state.setConnectionError());
+        }).catch(() => {state.setConnectionError()});
     }
     async setFollowers() {
         state.setWaitingState('Loading followers...');
         user.getFollowers().then(result => {
             this.followers = result;
-            state.setLoadedSuccess();
-        }).catch(state.setConnectionError());
+        }).catch(() => {state.setConnectionError()});
     }
     setContent(content) {
         $('#right-sidebar').empty();
         $('#right-sidebar').append(content);
     }
     async loadStatistic() {
-        this.setProfileImage();
-        this.setFollowing();
-        this.setFollowers();
+        await this.setProfileImage();
+        await this.setFollowing();
+        await this.setFollowers();
     }
     showStatistic() {
+        loader.showLoader();
         this.loadStatistic().then(() => {
             setTimeout(() => {
+                state.setLoadedSuccess();
                 this.setContent(`
                     <div class="stats-wrapper">
                         <header class="stats-header">
@@ -74,7 +73,7 @@ class Profile {
                         </main>
                     </div>
                 `);
-            }, 250);
+            }, 5000);
         });
     }
 }

@@ -7,11 +7,11 @@ class Server {
         this.client.quit();
     }
     async init() {
-        //var _options = new chrome.Options();
-        //_options.headless();
+        var _options = new chrome.Options();
+        _options.headless();
         this.client = new webdriver.Builder()
-            //.setFirefoxOptions(_options)
-            //.withCapabilities('chrome')
+            .setChromeOptions(_options)
+            .withCapabilities('chrome')
             .forBrowser('chrome')
             .build();
         this.URL = 'https://instagram.com';

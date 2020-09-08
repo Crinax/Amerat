@@ -41,16 +41,16 @@ class User {
     async getFollowing() {
         var elems;
         await SERVER.find({className: 'g47SY '}, 10000, true).then(result => {
-            elems = result
+            elems = result;
         });
-        return await elems[1].getText();
+        return await elems[2].getText();
     }
     async getFollowers() {
         var elems;
         await SERVER.find({className: 'g47SY '}, 10000, true).then(result => {
             elems = result;
         });
-        return await elems[2].getText();
+        return await elems[1].getText();
     }
     done() {
         SERVER.destructor();

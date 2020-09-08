@@ -6,4 +6,6 @@
     box-sizing: border-box;
     border-left: 2px solid rgb(255, 255, 255);
     transition: width .3s;
+    display: flex;
+    flex-direction: column;
 }

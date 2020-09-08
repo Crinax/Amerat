@@ -13,9 +13,9 @@ function createWindow() {
     transparent: true,
     icon: 'src/images/icon.ico',
     webPreferences: {
+      worldSafeExecuteJavaScript: true,
       nodeIntegration: true,
-      enableRemoteModule: true,
-      worldSafeExecuteJavaScript: true
+      enableRemoteModule: true,      
     },
   });
   win.loadFile('src/pages/index.html');
