@@ -21,6 +21,7 @@ function createWindow() {
   win.loadFile('src/pages/index.html');
   app.on('closed', () => {
     win = null;
+    user.done();
   });
 }
 app.whenReady().then(createWindow);

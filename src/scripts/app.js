@@ -21,7 +21,7 @@ loginWindow.setContent(`
         <div class="form-fields">
             <p id="login-text">Login, e-mail or phone number</p>
             <div class="input-container">
-                <input type="text" id="login-input" placeholder="Login, e-mail or phone num" disabled />
+                <input type="text" id="login-input" placeholder="Login, e-mail or phone number" disabled/>
             </div>
             <p id="pass-text">Password</p>
             <div class="input-container">
@@ -42,6 +42,7 @@ user.init();
 var dw = setTimeout(dwf = () => {
     if ($('.success').length > 0) {
         $('#login-input').removeAttr('disabled');
+        $('#login-input').focus();
         $('#password-input').removeAttr('disabled');
         $('.form-submit').attr('onclick', 'authorize();');
         clearTimeout(dw);

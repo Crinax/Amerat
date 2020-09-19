@@ -6,12 +6,15 @@
 @import 'modals';
 @import 'profile';
 @import 'loader';
+@import 'montserrat.css';
+@import 'montserrat.scss';
 * {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
+    font-family: $montserrat-light;
 }
 body {
     padding: 0px;

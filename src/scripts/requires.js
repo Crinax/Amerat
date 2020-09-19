@@ -5,6 +5,7 @@ const chrome = require('selenium-webdriver/chrome');
 //Server
 const Server = require('../scripts/server');
 const User = require('../scripts/user');
+const Post = require('../scripts/post');
 const State = require('../scripts/state');
 //Graphics
 const { AppWindow } = require('../scripts/graphics');

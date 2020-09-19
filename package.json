@@ -76,6 +76,8 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.20.6",
-    "sass": "^1.26.10"
+    "font-awesome": "^4.7.0",
+    "sass": "^1.26.10",
+    "wfk-montserrat": "^1.0.0"
   }
 }
