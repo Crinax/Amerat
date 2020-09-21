@@ -104,6 +104,102 @@ class Profile {
     addToContent(selector, content) {
         $(selector).append(content);
     }
+    refreshContent(selector, content) {
+        $(selector).remove();
+        this.addToContent('.posts-list', content);
+    }
+    sortByLikes(posts) {
+        if (!Array.isArray(posts)) {
+            state.setErrorState(`Argument isn't array. Please send this on icfewnin@gmail.com. Error code: sBL@113`);
+            throw 'Argument condition error';
+        }
+        posts.sort((a, b) => {
+            if (a.likes > b.likes) { return -1; }
+            if (a.likes < b.likes) { return 1; }
+            if (a.likes = b.likes) {
+                if (a.comments > b.comments) { return -1; }
+                if (a.comments < b.comments) { return 1; }
+                return 0;
+            }
+        });
+        return posts;
+    }
+    sortByComment(posts) {
+        if (!Array.isArray(posts)) {
+            state.setErrorState(`Argument isn't array. Please send this on icfewnin@gmail.com. Error code: sBL@113`);
+            throw 'Argument condition error';
+        }
+        posts.sort((a, b) => {
+            if (a.comments > b.comments) { return -1; }
+            if (a.comments < b.comments) { return 1; }
+            if (a.comments = b.comments) {
+                if (a.likes > b.likes) { return -1; }
+                if (a.likes < b.likes) { return 1; }
+                return 0;
+            }
+        });
+        return posts;
+    }
+    addPostsList(posts) {
+        this.addToContent('.stats-main', `
+            <div class="posts-list">
+                <div class="best-post-wrapper">
+                    <div class="best-post-header">
+                        <h3 class="best-post-header-text">Top #1</h3>
+                    </div>
+                    <div class="best-post-border">
+                        <div class="best-post">
+                            <div class="best-post-image-wrapper">
+                                <img class="best-post-image" src="${posts[0].IMAGE_SOURCE}" onclick="user.profile.maxImage(this);" />
+                            </div>
+                            <div class="best-post-stat">
+                                <span class="best-post-likes">
+                                    Likes: 
+                                    <span class="best-post-likes-value">${posts[0].likes}</span>
+                                </span>
+                                <span class="best-post-comments">
+                                    Comments: 
+                                    <span class="best-post-comments-value">${posts[0].comments}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="default-posts"></div>
+                <div class="button-show-all">
+                    <div class="button-show-all-text" onclick="user.profile.showAll(true, 0);">
+                        <div class="arrow">»</div>
+                        <span id="button-show-text">Show all</span>
+                        <div class="arrow">»</div>
+                    </div>
+                </div>
+            </div>
+        `);
+        for (let i = 2; i <= posts.length; i++) {
+            this.addToContent('.default-posts', `
+                <div class="post">
+                    <div class="post-header">
+                        <h3 class="post-header-text">#${i}</h3>
+                    </div>
+                    <div class="post-body">
+                        <div class="post-image-wrapper">
+                            <img class="post-image" src="${posts[i-1].IMAGE_SOURCE}" onclick="user.profile.maxImage(this);"/>
+                        </div>
+                        <div class="post-stat">
+                            <span class="post-likes">
+                                Likes:
+                                <span class="post-likes-value">${posts[i-1].likes}</span>
+                            </span>
+                            <span class="post-comments">
+                                Comments:
+                                <span class="post-comments-value">${posts[i-1].comments}</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+    }
     async showStatistic(dev = false) {
         loader.showLoader();
         await this.loadStatistic(dev).then(dev => {
@@ -139,77 +235,9 @@ class Profile {
                         <div class="main-stats-header">
                             <h2 class="main-stats-header-text">Top posts by likes</h2>
                         </div>
-                        
                     </main>
                 </div>
             `);
-            this.postsArr.sort((a, b) => {
-                if (a.likes > b.likes) { return -1; }
-                if (a.likes < b.likes) { return 1; }
-                if (a.likes = b.likes) {
-                    if (a.comments > b.comments) { return -1; }
-                    if (a.comments < b.comments) { return 1; }
-                    return 0;
-                }
-            });
-            this.addToContent('.stats-main', `
-                <div class="posts-list">
-                    <div class="best-post-wrapper">
-                        <div class="best-post-header">
-                            <h3 class="best-post-header-text">Top #1</h3>
-                        </div>
-                        <div class="best-post-border">
-                            <div class="best-post">
-                                <div class="best-post-image-wrapper">
-                                    <img class="best-post-image" src="${this.postsArr[0].IMAGE_SOURCE}" onclick="user.profile.maxImage(this);" />
-                                </div>
-                                <div class="best-post-stat">
-                                    <span class="best-post-likes">
-                                        Likes: 
-                                        <span class="best-post-likes-value">${this.postsArr[0].likes}</span>
-                                    </span>
-                                    <span class="best-post-comments">
-                                        Comments: 
-                                        <span class="best-post-comments-value">${this.postsArr[0].comments}</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="default-posts"></div>
-                    <div class="button-show-all">
-                        <div class="button-show-all-text" onclick="user.profile.showAll(true, 0);">
-                            <div class="arrow">»</div>
-                            <span id="button-show-text">Show all</span>
-                            <div class="arrow">»</div>
-                        </div>
-                    </div>
-                </div>
-            `);
-            for (let i = 2; i <= this.postsArr.length; i++) {
-                this.addToContent('.default-posts', `
-                    <div class="post">
-                        <div class="post-header">
-                            <h3 class="post-header-text">#${i}</h3>
-                        </div>
-                        <div class="post-body">
-                            <div class="post-image-wrapper">
-                                <img class="post-image" src="${this.postsArr[i-1].IMAGE_SOURCE}" onclick="user.profile.maxImage(this);"/>
-                            </div>
-                            <div class="post-stat">
-                                <span class="post-likes">
-                                    Likes:
-                                    <span class="post-likes-value">${this.postsArr[i-1].likes}</span>
-                                </span>
-                                <span class="post-comments">
-                                    Comments:
-                                    <span class="post-comments-value">${this.postsArr[i-1].comments}</span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            }
         });
     }
     showAll(param, id) {
