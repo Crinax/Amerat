@@ -60,7 +60,80 @@ class User {
     async to(url, stat = false) {
         return await SERVER.to(url, stat);
     }
-    async getPosts() {
+    async getPosts(quantity = 0) {
+        var links = [];
+        var images = [];
+        var likes = [];
+        var comments = [];
+        var a = [];
+        var b = [];
+        await SERVER.scroll(0, 0);
+
+        if (this.profile.posts == 0) {
+            await this.profile.setPosts();
+        }
+        if (this.profile.posts == 0) {
+            return `You haven't posts!`;
+        }
+        var limit = (quantity <= this.profile.posts) && (quantity > 0) ? quantity : this.profile.posts;
+        var elem, textComm, check, textLikes;
+        for (let i = 0; i < limit; i++) {
+            // Получаем новые записи, если достигнут максимум списка
+            if (i >= links.length - 1) {
+                a = await SERVER.asyncFind({css: '.v1Nh3.kIKUG._bz0w > a'}, 10000, true);
+                b = await SERVER.asyncFind({css: '.v1Nh3.kIKUG._bz0w > a > .eLAPa > .KL4Bh > img'}, 10000, true);
+                for (let j = 0; j < a.length; j++) {
+                    a[j] = await a[j].getAttribute('href');
+                    b[j] = await b[j].getAttribute('src');
+                }
+                links.push(...a);
+                links = uniq(links);
+                images.push(...b);
+                images = uniq(images);
+            }
+            
+            // Эмулируем наведение на элемент укзателя мыши
+            elem = await SERVER.asyncFind({css: `.v1Nh3.kIKUG._bz0w > a[href*="${links[i].slice(26)}"]`});
+            const actions = SERVER.client.actions({async: true});
+            await actions.move({origin: elem}).perform();
+            // Получаем количество комментариев
+            textComm = await SERVER.asyncFind({css: '.Ln-UN > .-V_eO:last-child > span:first-child'});
+            textComm = await textComm.getText();
+            // Получаем иконку сердца (лайка)
+            check = undefined;
+            await SERVER.asyncFind({css: '.Ln-UN > .-V_eO:first-child > span[class*="coreSpriteHeartSmall"]'}, 500).then(result => {
+                check = result;
+            }).catch(() => {});
+            // Проверяем, получилось ли получить иконку
+            // Если иконка есть, то получаем количество лайков
+            if (check != undefined) {
+                textLikes = await SERVER.asyncFind({css: '.Ln-UN > .-V_eO:first-child > span:first-child'});
+            }
+            // Если иконки нет, значит, элемент, на который наведена мышь - видео
+            else {
+                // Эмулируем нажатие мыши на видео
+                await SERVER.click({css: '._1P1TY.coreSpritePlayIconSmall'});
+                await SERVER.click({css: '.vcOH2'});
+                // Получаем количество лайков, кликанием на количество просмотров
+                textLikes = await SERVER.asyncFind({css: '.vJRqr > span'});
+                await SERVER.click({css: '.QhbhU'});
+                await SERVER.click({css: '.Igw0E.IwRSH.eGOV_._4EzTm.BI4qX.qJPeX.fm1AK.TxciK.yiMZG'});
+            }
+            textLikes = await textLikes.getText();
+            likes.push(+textLikes);
+            comments.push(+textComm);
+            state.setWaitingState(`Loading post (posts loaded ${i+1}/${limit})...`);
+            /*
+            Получаем ссылки видимых постов -> через эти элементы получаем картинки постов
+            Используя элементы ссылок и наводясь на них получаем количество лайков
+            */
+        }
+        for (let i = 0; i < limit; i++) {
+            this.profile.postsArr.push(new Post(links[i], images[i], likes[i], comments[i], i+1));
+        }
+        return await this.profile.postsArr;
+    }
+    async getPostsq(quantity) {
         var links = [];
         var images = [];
         var likes = [];
@@ -75,7 +148,8 @@ class User {
         if (this.profile.posts == 0) {
             return `You haven't posts!`;
         }
-        while (links.length < this.profile.posts) {
+        limit = quantity <= this.profile.posts ? quantity : this.profile.posts;
+        while (links.length < limit) {
             let a = await SERVER.asyncFind({css: '.v1Nh3.kIKUG._bz0w > a'}, 10000, true);
             var j  = 0;
             for (let i = 0; i != a.length; i++) {
@@ -97,6 +171,8 @@ class User {
             let elem = await SERVER.asyncFind({css: `.v1Nh3.kIKUG._bz0w > a[href*="${links[j].slice(26)}"]`});
             const actions = SERVER.client.actions({async: true});
             await actions.move({origin: elem}).perform();
+            // qn-0x
+            // Для консоли в браузере: document.querySelector('.v1Nh3.kIKUG._bz0w.mtz-vlc-cgmpmfilbdlmohglaobhngamnglfkgeb > a').dispatchEvent(new Event("focus"));
             let textComm = await SERVER.asyncFind({css: '.Ln-UN > .-V_eO:last-child > span:first-child'});
             textComm = await textComm.getText();
             let check;

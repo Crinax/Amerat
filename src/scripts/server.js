@@ -9,11 +9,11 @@ class Server {
         this.client.quit();
     }
     async init() {
-        var _options = new chrome.Options();
-        _options.headless();
+        // var _options = new chrome.Options();
+        // _options.headless();
         this.client = new webdriver.Builder()
-            .setChromeOptions(_options)
-            .withCapabilities('chrome')
+            // .setChromeOptions(_options)
+            // .withCapabilities('chrome')
             .forBrowser('chrome')
             .build();
         this.URL = 'https://instagram.com';
@@ -85,29 +85,39 @@ class Server {
 }
 module.exports = Server;
 /*
-var elements = [];
-while (true) {
-    let i = 20;
-    elements.push(SERVER.find({className: 'Nnq7C weEfm'}, 10000, true));
-    SERVER.clent.executeScript(`window.scrollTo(0, ${i});`);
-    i += 20;
-}
-function scrolling(per) {
-    var elements = [];
-    var elemsq, elemsqpast;
-    while (true) {
-        let i = per;
-        SERVER.find({className: 'Nnq7C weEfm'}, 10000, true).then(result => {
-            elements.push(result);
-        });
-        elemsq = Array.from(new Set(elements)).length;
-        if (elemsq == elemsqpast) {
-            break;
+function searchElements() {
+    var a = []
+    a.push(...document.querySelectorAll('.v1Nh3.kIKUG._bz0w.mtz-vlc-cgmpmfilbdlmohglaobhngamnglfkgeb > a'));
+    a = Array.prototype.slice.call(a);
+    var list = [];
+    var likes = [];
+    var x = 0;
+    var y = 0;
+    var comments = [];
+    window.scroll(x, y);
+    for (let i = 0; i < a.length; i++) {
+        if (i == a.length - 2) {
+            y += 2500;
+            window.scroll(x, y);
+            a.push(...document.querySelectorAll('.v1Nh3.kIKUG._bz0w.mtz-vlc-cgmpmfilbdlmohglaobhngamnglfkgeb > a'));
+            a = Array.from(new Set(a));
         }
-        elemsqpast = elemsq
-        SERVER.client.executeScript(`window.scrollTo(0, ${i});`);
-        i += per;
+        try { a[i].dispatchEvent(new Event('focus')); }
+        catch (err) {
+            console.error(err);
+            return {list: a, index: i, error: err};
+        }
+        console.log({list: a, index: i});
+        list.push(a[i].getAttribute('href'));
+        comments.push(document.querySelector('.Ln-UN > .-V_eO:last-child > span:first-child').textContent);
+        likes.push(document.querySelector('.Ln-UN > .-V_eO:first-child > span:first-child').textContent);
+        a[i].dispatchEvent(new Event('blur'));
     }
-    return elements;
+    return {
+        array: a,
+        links: list,
+        likes: likes,
+        comments: comments
+    }
 }
 */

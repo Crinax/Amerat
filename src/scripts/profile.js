@@ -1,3 +1,4 @@
+const { AppWindow } = require("./graphics");
 const ModalWindow = require("./modal");
 const Server = require("./server");
 
@@ -14,6 +15,19 @@ class Profile {
         this.imageModal = new ModalWindow();
         this.imageModal.setClasses('modal-fog', 'image-window', 'image-content');
         this.imageModal.setSize(450, 450);
+        this.statsUpdated = false;
+        this.statsTimer = false;
+        this.nextSort = 'likes';
+    }
+    async timer() {
+        this.statsTimer = true;
+        var c = 0;
+        var p = new Promise(function ads(resolve, reject) {
+            setTimeout(() => {
+                this.statsUpdated = false;
+                p = new Promise(ads);
+            }, 600000);
+        });
     }
     async setProfileImage() {
         state.setWaitingState('Loading profile image...');
@@ -51,16 +65,18 @@ class Profile {
             state.setConnectionError();
         }
     }
-    async setPosts() {
-        state.setWaitingState('Getting posts...');
+    async setPosts(quantity) {
+        state.setWaitingState('Loading posts...');
         this.postsArr = [];
+        if (!AppWindow.allIsBlocked) { AppWindow.changeBlockAll(); }
         try {
-            this.postsArr = await user.getPosts();
+            this.postsArr = await user.getPosts(quantity);
         }
         catch (err) {
             state.setConnectionError();
             console.log(err);
         }
+        if (AppWindow.allIsBlocked) { AppWindow.changeBlockAll(); }
     }
     async getTotalLikes() {
         if (typeof this.posts == 'string') {
@@ -88,18 +104,26 @@ class Profile {
         $('#right-sidebar').empty();
         $('#right-sidebar').append(content);
     }
-    async loadStatistic(dev = false) {
-        await user.toProfile();
-        await this.setProfileImage();
-        await this.setFollowing();
-        await this.setFollowers();
-        await this.setPostsCount();
-        if (!dev) {
-            await this.setPosts();
-            this.totalLikes = await this.getTotalLikes();
-            this.totalComments = await this.getTotalComments();
+    async loadStatistic() {
+        if(!this.statsUpdated) {
+            AppWindow.changeBlockAll();
+            this.statsUpdated = !this.statsUpdated;
+            if (!this.statsTimer) { this.timer(); }
+            $('body').addClass('progress');
+            await user.toProfile();
+            await this.setProfileImage();
+            await this.setFollowing();
+            await this.setFollowers();
+            await this.setPostsCount();
+            await this.setPosts(5);
+            if (!AppWindow.allIsBlocked) { AppWindow.changeBlockAll(); }
+            if (this.posts == this.postsArr.length) {
+                this.totalLikes = await this.getTotalLikes();
+                this.totalComments = await this.getTotalComments();
+            }
+            $('body').removeClass('progress');
+            AppWindow.changeBlockAll();
         }
-        return dev;
     }
     addToContent(selector, content) {
         $(selector).append(content);
@@ -124,7 +148,7 @@ class Profile {
         });
         return posts;
     }
-    sortByComment(posts) {
+    sortByComments(posts) {
         if (!Array.isArray(posts)) {
             state.setErrorState(`Argument isn't array. Please send this on icfewnin@gmail.com. Error code: sBL@113`);
             throw 'Argument condition error';
@@ -139,6 +163,40 @@ class Profile {
             }
         });
         return posts;
+    }
+    sortByTime(posts) {
+        if (!Array.isArray(posts)) {
+            state.setErrorState(`Argument isn't array. Please send this on icfewnin@gmail.com. Error code: sBL@113`);
+            throw 'Argument condition error';
+        }
+        posts.sort((a, b) => {
+            if (a.index > b.index) { return 1; }
+            if (a.index < b.index) { return -1; }
+            if (a.index = b.index) { return 0; }
+        });
+        return posts;
+    }
+    changeSort(typeSort) {
+        switch (typeSort.toLowerCase()) {
+            case 'likes':
+                $('.posts-list').remove();
+                this.nextSort = 'comments';
+                $('.main-stats-change-sort').text('by likes');
+                this.addPostsList(this.sortByLikes(this.postsArr));
+                break;
+            case 'comments':
+                $('.posts-list').remove();
+                this.nextSort = 'time';
+                $('.main-stats-change-sort').text('by comments');
+                this.addPostsList(this.sortByComments(this.postsArr));
+                break;
+            case 'time':
+                $('.posts-list').remove();
+                this.nextSort = 'likes';
+                $('.main-stats-change-sort').text('by time');
+                this.addPostsList(this.sortByTime(this.postsArr));
+                break;
+        }
     }
     addPostsList(posts) {
         this.addToContent('.stats-main', `
@@ -167,11 +225,11 @@ class Profile {
                 </div>
                 <div class="default-posts"></div>
                 <div class="button-show-all">
-                    <div class="button-show-all-text" onclick="user.profile.showAll(true, 0);">
+                    <button class="button-show-all-text" onclick="user.profile.showAll(true, 0);">
                         <div class="arrow">»</div>
                         <span id="button-show-text">Show all</span>
                         <div class="arrow">»</div>
-                    </div>
+                    </button>
                 </div>
             </div>
         `);
@@ -200,9 +258,9 @@ class Profile {
             `);
         }
     }
-    async showStatistic(dev = false) {
+    async showStatistic() {
         loader.showLoader();
-        await this.loadStatistic(dev).then(dev => {
+        await this.loadStatistic().then(() => {
             state.setLoadedSuccess();
             this.setContent(`
                 <div class="stats-wrapper">
@@ -233,15 +291,22 @@ class Profile {
                             </div>
                         </div>
                         <div class="main-stats-header">
-                            <h2 class="main-stats-header-text">Top posts by likes</h2>
+                            <h2 class="main-stats-header-text">Top posts <button onclick="user.profile.changeSort(user.profile.nextSort)" class="main-stats-change-sort" title="Click to change">by time</button></h2>
                         </div>
                     </main>
                 </div>
             `);
+            this.addPostsList(this.postsArr);
         });
     }
-    showAll(param, id) {
+    async showAll(param, id) {
         if (param) {
+            $('body').addClass('progress');
+            if (this.postsArr.length != this.posts) {
+                await this.setPosts(this.posts);
+                await this.showStatistic();
+            }
+            $('body').removeClass('progress');
             $('.arrow').css({
                 'transform': 'rotate(-90deg)'
             });

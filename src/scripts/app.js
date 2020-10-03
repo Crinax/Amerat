@@ -1,6 +1,7 @@
 var loader = new Loader();
 var state = new State();
 var profile = new Profile();
+
 state.setConnecting();
 state.prevState(state.state());
 const checkState = () => {
@@ -14,6 +15,21 @@ var chS = setTimeout(asd = () => {
     checkState();
     chs = setTimeout(asd, 10);
 }, 10);
+function uniq(a) {
+    var seen = {};
+    var out = [];
+    var len = a.length;
+    var j = 0;
+    for(var i = 0; i < len; i++) {
+         var item = a[i];
+         if(seen[item] !== 1) {
+               seen[item] = 1;
+               out[j++] = item;
+         }
+    }
+    return out;
+}
+
 var loginWindow = new ModalWindow();
 loginWindow.setContent(`
     <header class="modal-header">Log in</header>

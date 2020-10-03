@@ -3,6 +3,7 @@ const { remote } = require('electron');
 class Graphics {
     constructor() {
         this.sidebar = true;
+        this.allIsBlocked = false;
     }
     toggleSidebar() {
         if (this.sidebar) {
@@ -30,6 +31,11 @@ class Graphics {
             });
         }
         this.sidebar = !this.sidebar;
+    }
+    changeBlockAll() {
+        if (!this.allIsBlocked) { $('body').append('<div class="modal-fog"></div>'); }
+        else { $('.modal-fog').remove(); }
+        this.allIsBlocked = !this.allIsBlocked;
     }
     closeWin() {
         remote.getCurrentWindow().close();
