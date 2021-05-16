@@ -57,27 +57,27 @@
     }
   },
   "dependencies": {
-    "chromedriver": "^85.0.0",
-    "electron": "^9.2.0",
-    "electron-compile": "^6.4.4",
-    "electron-squirrel-startup": "^1.0.0",
-    "jquery": "^3.5.1",
-    "selenium": "^2.20.0",
-    "selenium-webdriver": "^4.0.0-alpha.7"
+    "chromedriver": "^90.0.0",
+    "electron": "*",
+    "electron-compile": "*",
+    "electron-squirrel-startup": "*",
+    "jquery": "*",
+    "selenium": "*",
+    "selenium-webdriver": "4.0.0-beta.3"
   },
   "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "electron-forge": "^5.2.4",
-    "electron-prebuilt-compile": "8.2.0",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-react": "^7.20.6",
-    "font-awesome": "^4.7.0",
-    "sass": "^1.26.10",
-    "wfk-montserrat": "^1.0.0"
+    "babel-plugin-transform-async-to-generator": "*",
+    "babel-preset-env": "*",
+    "babel-preset-react": "*",
+    "electron-forge": "*",
+    "electron-prebuilt-compile": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-plugin-import": "*",
+    "eslint-plugin-jsx-a11y": "*",
+    "eslint-plugin-react": "*",
+    "font-awesome": "*",
+    "sass": "*",
+    "wfk-montserrat": "*"
   }
 }

@@ -13,7 +13,7 @@ class Server {
         // _options.headless();
         this.client = new webdriver.Builder()
             // .setChromeOptions(_options)
-            // .withCapabilities('chrome')
+            .withCapabilities('chrome')
             .forBrowser('chrome')
             .build();
         this.URL = 'https://instagram.com';
